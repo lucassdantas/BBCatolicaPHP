@@ -1,12 +1,8 @@
 <?php
-    if(isset($_POST["btn-login"])){
-        echo "oi";
-    }
-    else{
-        echo "aaa";
+    if (isset($_POST["btn-login"])){
+        
     }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>

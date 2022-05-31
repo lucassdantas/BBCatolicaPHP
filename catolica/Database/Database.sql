@@ -13,4 +13,9 @@ insert into usuarios values
 	(default, "Lucas", "M", "lucasdesousadantas@gmail.com","2002-01-07"),
     (default, "Admin", "M", "lucasdantasprogramador@gmail.com","2002-01-07");
     
-    
+
+create user "lucas"@"localhost" identified by "lucas";
+grant all privileges on *.* to "lucas"@"localhost";
+flush privileges;
+show grants for "lucas"@"localhost";
+show databases;

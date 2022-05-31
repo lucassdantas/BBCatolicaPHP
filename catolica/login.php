@@ -1,7 +1,34 @@
 <?php
-    if (isset($_POST["btn-login"])){
-        
+require_once "./Php/conexao.php";
+session_start();
+$exibir = 0;
+if (isset($_POST["btn-login"])){
+    $erros = array();
+    $login = mysqli_escape_string($connect, $_POST["login"]); 
+    $senha = mysqli_escape_string($connect, $_POST["password"]);
+    
+    if ((empty($login)) ||(empty($senha))){
+        $exibir = 1;
+    } else {
+        $entrada = mysqli_query($connect,
+         "SELECT nome FROM clientes where nome = '$login'"
+        );
+        if(mysqli_num_rows($entrada) > 0){
+           $entrada = mysqli_query($connect, "SELECT nome FROM clientes WHERE nome = '$login' AND senha = '$senha'");
+           if(mysqli_num_rows($entrada) == 1){
+               $_SESSION['logado'] = 1;
+               $_SESSION['id_usuario'] = $dados ["id"];
+           } else{
+               $exibir = 2;
+           }   
+        }
+        else{
+            $exibir = 3;
+        }
     }
+    
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -30,10 +57,10 @@
         <div class="formulario">
             <h2>Bem-vindo(a)</h2>
             <p>Faça login para acessa a área do assinante.</p>
-            <form method="post" action="./login.php"> 
+            <form id="formulario" method="post" action="<?php echo $_SERVER["PHP_SELF"];?>"> 
                 <input 
-                    type="email" 
-                    name="email" 
+                    type="text" 
+                    name="login" 
                     placeholder="Email"
                 >
                 <input
@@ -50,11 +77,24 @@
                     class="btn red c_white"
                     placeholder="Fazer Login"
                 >
-                   
-                
-                <a href="#" class="c_red">Não é assinante? Clique aqui</a>
+                <?php if($exibir){
+                    switch ($exibir){
+                        case 2:
+                            echo "<p>Senha Inválida</p>";
+                            break;
+                        case 3:
+                            echo "<p>Login Inválido</p>";
+                            break;
+                        default:
+                            echo "<p>Preencha os campos</p>";   
+                            break;
+                        }
+                    }
+                 ?>
             </form>
+            <a href="#" class="c_red">Não é assinante? Clique aqui</a>
             <a href="#" class="c_red">Acesse os termos uso</a>
         </div>
     </main>
+    <script src="./Scripts/PreventDefault.js"></script>
 </body>

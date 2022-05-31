@@ -16,8 +16,10 @@ if (isset($_POST["btn-login"])){
         if(mysqli_num_rows($entrada) > 0){
            $entrada = mysqli_query($connect, "SELECT nome FROM clientes WHERE nome = '$login' AND senha = '$senha'");
            if(mysqli_num_rows($entrada) == 1){
+               $colunas = mysqli_fetch_array($entrada);
                $_SESSION['logado'] = 1;
-               $_SESSION['id_usuario'] = $dados ["id"];
+               $_SESSION['id_usuario'] = $colunas ["registro"];
+               header('Location: logado.php');
            } else{
                $exibir = 2;
            }   
@@ -26,7 +28,6 @@ if (isset($_POST["btn-login"])){
             $exibir = 3;
         }
     }
-    
 }
 
 ?>
